@@ -10,5 +10,10 @@ public class App {
 
 	public static void main(String[] args) {
 		System.out.println("안녕하세요");
+		int a = 100;
+		if(a < 500) {
+			System.out.println("Hello!");
+		}
+		System.out.println("점심시간이다.");
 	}
 }
