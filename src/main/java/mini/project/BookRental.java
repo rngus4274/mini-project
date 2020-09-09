@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 public class BookRental {
 
-
 	public static void rental () {
 		Scanner keyboardscan = new Scanner(System.in);
 		ArrayList<Book> bookList = new ArrayList<>();
@@ -40,6 +39,5 @@ public class BookRental {
 			}
 		}
 	}
-
 }
 
