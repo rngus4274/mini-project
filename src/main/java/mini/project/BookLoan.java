@@ -1,18 +1,10 @@
-
 package mini.project;
 
 import java.util.Scanner;
 
-public class App {
-	static Scanner keyboardScan = new Scanner(System.in);
-
+public class BookLoan {
 	public static void main(String[] args) {
-		BookLoan();
-	}
 
-	static void BookLoan() {
-
-		java.sql.Date now = new java.sql.Date(System.currentTimeMillis());
 		Scanner keyboardscan = new Scanner(System.in);
 
 		System.out.println("[대출 시스템]");
@@ -20,7 +12,8 @@ public class App {
 		System.out.print("대출하실 책의 고유번호를 입력해주세요 : ");
 		String bookNo = keyboardscan.nextLine();
 
-		System.out.println("입력하신 책은 대출이 가능합니다. ");			
+		System.out.println("입력하신 책은 대출이 가능합니다. ");
+
 		System.out.println("대출 하시겠습니까?(y/N) ");
 		String str = keyboardscan.nextLine();
 
@@ -36,9 +29,7 @@ public class App {
 
 			System.out.print("전화번호 :");
 			String tel = keyboardscan.nextLine();
-
 			System.out.println("대출을 완료하였습니다.");
-			System.out.printf("대출 기한은 %s까지입니다.\n", (now) System.currentTimeMillis() + 7);
 		}
 		keyboardscan.close();
 	}
