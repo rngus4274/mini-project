@@ -5,9 +5,8 @@ public class BookReturn {
 		Member member = new Member();
 
 		System.out.printf("현재 %s님 께서 대출하고 계신 도서 목록입니다.\n", member.getName());
-		for (int i = 0; i < bookList.size(); i++) {
 
-		}
 	}
 }
+
 

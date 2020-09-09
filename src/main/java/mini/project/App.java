@@ -7,7 +7,6 @@ import java.util.Scanner;
 
 public class App {
 	public static void main(String[] args) {
-
 		Member member = new Member();
 
 		String command;

@@ -36,7 +36,6 @@ public class BookRental {
 				System.out.print("전화번호 :");
 				String tel = keyboardscan.nextLine();
 				System.out.println("대여를 완료하였습니다.");
-				System.out.printf("대여 기한은 %d까지입니다.\n", );
 				break;
 			}
 		}
