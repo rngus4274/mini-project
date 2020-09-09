@@ -5,15 +5,20 @@ package mini.project;
 
 public class App {
 	public String getGreeting() {
-		return "Hello world. 77777555";
+		return "Hello world......1111........";
 	}
 
 	public static void main(String[] args) {
+		System.out.println("이성권");
 		System.out.println("안녕하세요");
+		
 		int a = 100;
 		if(a < 500) {
 			System.out.println("Hello!");
 		}
 		System.out.println("점심시간이다.");
+		
+		System.out.println("11111");
+		a = 1;
 	}
 }
