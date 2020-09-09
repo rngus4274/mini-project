@@ -10,5 +10,6 @@ public class App {
 
 	public static void main(String[] args) {
 		System.out.println("이성권");
+		System.out.println("안녕하세요");
 	}
 }
