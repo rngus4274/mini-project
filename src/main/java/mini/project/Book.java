@@ -8,7 +8,6 @@ public class Book {
 	private String author;
 	private String plot;
 	private String content;
-	private ArrayList<String> rentMemberList;
 	
 	public String getId() {
 		return id;
@@ -39,12 +38,6 @@ public class Book {
 	}
 	public void setContent(String content) {
 		this.content = content;
-	}
-	public ArrayList<String> getRentMemberList() {
-		return rentMemberList;
-	}
-	public void setRentMemberList(ArrayList<String> rentMemberList) {
-		this.rentMemberList = rentMemberList;
 	}
 	
 }
