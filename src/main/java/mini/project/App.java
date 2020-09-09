@@ -1,45 +1,116 @@
 
 package mini.project;
 
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 
 public class App {
-	static Scanner keyboardScan = new Scanner(System.in);
-
 	public static void main(String[] args) {
-		BookLoan();
-	}
 
-	static void BookLoan() {
+		Member member = new Member();
 
-		java.sql.Date now = new java.sql.Date(System.currentTimeMillis());
-		Scanner keyboardscan = new Scanner(System.in);
+		String command;
+		Scanner sc = new Scanner(System.in);
+		Map sessionInfo = null;
+		main: while (true) {
+			System.out.println("=============================");
+			System.out.println("비트캠프 전자도서관에 오신것을 환영합니다.");
+			System.out.println("1. 로그인");
+			System.out.println("2. 종료");
+			System.out.println("=============================");
+			System.out.print("명령 : ");
+			command = sc.next();
 
-		System.out.println("[대출 시스템]");
+			if (command.equals("1")) {
+				System.out.print("아이디 : ");
+				member.setId(sc.next());
+				System.out.print("비밀번호 : ");
+				member.setPassword(sc.next());
 
-		System.out.print("대출하실 책의 고유번호를 입력해주세요 : ");
-		String bookNo = keyboardscan.nextLine();
+				Map<String, String> checkResult = LibraryDao.memberCheck(member);
 
-		System.out.println("입력하신 책은 대출이 가능합니다. ");			
-		System.out.println("대출 하시겠습니까?(y/N) ");
-		String str = keyboardscan.nextLine();
+				if (checkResult != null) {
+					System.out.println("로그인 성공!");
+					sessionInfo = checkResult;
 
-		if(!str.equalsIgnoreCase("y")) {
-			System.out.println("대출을 종료합니다.");
-		} else {
-			System.out.println("사용자 정보를 입력하여 주십시오.");
-			System.out.print("성함 :");
-			String name = keyboardscan.nextLine();
+					login_first: while (true) {
+						if (sessionInfo == null) {
+							continue main;
+						}
 
-			System.out.print("주소 :");
-			String address = keyboardscan.nextLine();
+						System.out.println("=============================");
+						System.out.printf("전자 도서관에 오신것을 환영합니다  %s님!\n", sessionInfo.get("name"));
+						System.out.println("1. 도서목록");
+						System.out.println("2. 대출하기");
+						System.out.println("3. 반납하기");
+						System.out.println("4. 로그아웃");
+						System.out.println("=============================");
+						System.out.print("명령 : ");
+						command = sc.next();
+						if (command.equals("1")) {
+							book_list: while (true) {
+								System.out.println("=========도서목록=========");
+								ArrayList<Book> bookList = LibraryDao.bookList();
+								for (int i = 0; i < bookList.size(); i++) {
+									System.out.printf("%s. %s\n", i, bookList.get(i).getTitle());
+								}
+								System.out.println("========================");
+								System.out.println("뒤로 가려면 exit를 입력해 주세요");
+								System.out.print("명령 : ");
+								command = sc.next();
+								if (command.equals("exit")) {
+									continue login_first;
+								} else {
+									try {
+										Book bookInfo = bookList.get(Integer.valueOf(command));
+										System.out.println("========================");
+										System.out.printf("제목    : %s\n", bookInfo.getTitle());
+										System.out.printf("저자    : %s\n", bookInfo.getAuthor());
+										System.out.printf("줄거리 : %s\n", bookInfo.getPlot());
+										System.out.println("========================");
+										System.out.println("뒤로 가려면 exit를 입력해 주세요");
+										System.out.print("명령 : ");
+										command = sc.next();
+										if (command.equals("exit")) {
+											continue book_list;
+										} else {
+											System.out.println("존재하지 않는 명령입니다.");
+										}
 
-			System.out.print("전화번호 :");
-			String tel = keyboardscan.nextLine();
+									} catch (Exception e) {
+										System.out.println("해당하는 책 정보가 존재하지 않습니다.");
+										continue book_list;
+									}
+								}
+							}
 
-			System.out.println("대출을 완료하였습니다.");
-			System.out.printf("대출 기한은 %s까지입니다.\n", (now) System.currentTimeMillis() + 7);
+						} else if (command.equals("2")) {
+							System.out.println("대출 시스템에 접속하셨습니다.");
+							System.out.println("=============================");
+							BookRental.rental();
+							break;
+
+						} else if (command.equals("3")) {
+							System.out.println("반납 시스템에 접속하셨습니다.");
+							System.out.println("=============================");
+							BookReturn.Return();
+
+						} else if (command.equals("4")) {
+							sessionInfo = null;
+							continue login_first;
+						}
+					}
+				} else {
+					System.out.println("해당 계정 정보가 존재하지 않습니다.");
+				}
+
+			} else if (command.equals("2")) {
+				System.out.println("종료 되었습니다..");
+				break;
+			} else {
+				continue;
+			}
 		}
-		keyboardscan.close();
 	}
 }
