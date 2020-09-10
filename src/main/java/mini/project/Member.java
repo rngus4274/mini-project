@@ -7,7 +7,7 @@ public class Member {
 	private String id;
 	private String password;
 	private String rating;
-	private ArrayList<String> rentMemberList;
+	private ArrayList<String> rentBookList;
 	
 	public String getName() {
 		return name;
@@ -33,11 +33,12 @@ public class Member {
 	public void setRating(String rating) {
 		this.rating = rating;
 	}
-	public ArrayList<String> getRentMemberList() {
-		return rentMemberList;
+	public ArrayList<String> getRentBookList() {
+		return rentBookList;
 	}
-	public void setRentMemberList(ArrayList<String> rentMemberList) {
-		this.rentMemberList = rentMemberList;
+	public void setRentBookList(ArrayList<String> rentBookList) {
+		this.rentBookList = rentBookList;
 	}
+	
 	
 }

@@ -168,4 +168,47 @@ public class LibraryDao {
 		
 		return true;
 	}
+	
+	public static ArrayList<String> rentList(Map<String, String> sessionInfo) {
+		for(int i = 0; i < LibraryDao.memberList.size(); i++) {
+			if(sessionInfo.get("id") == LibraryDao.memberList.get(i).getId()) {
+				ArrayList<String> rentList = LibraryDao.memberList.get(i).getRentBookList();
+				return rentList;
+			}
+		}
+		return null;
+	}
+	
+	public static boolean rentBook(Map<String, String> sessionInfo, String bookId) {
+		for(int i = 0; i < LibraryDao.memberList.size(); i++) {
+			if(sessionInfo.get("id") == LibraryDao.memberList.get(i).getId()) {
+				Member member = LibraryDao.memberList.get(i);
+				ArrayList<String> tempRentBookList = member.getRentBookList();
+				tempRentBookList.add(bookId);
+				member.setRentBookList(tempRentBookList);
+				
+				LibraryDao.memberList.set(i, member);
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public static boolean returnBook(Map<String, String> sessionInfo, String bookId) {
+		for(int i = 0; i < LibraryDao.memberList.size(); i++) {
+			if(sessionInfo.get("id") == LibraryDao.memberList.get(i).getId()) {
+				Member member = LibraryDao.memberList.get(i);
+				ArrayList<String> tempRentBookList = member.getRentBookList();
+				int rentBookIndex = tempRentBookList.indexOf(bookId);
+				tempRentBookList.remove(rentBookIndex);
+				member.setRentBookList(tempRentBookList);
+				
+				LibraryDao.memberList.set(i, member);
+				return true;
+			}
+		}
+		
+		return false;
+	}
 }
