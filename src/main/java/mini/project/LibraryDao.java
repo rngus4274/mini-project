@@ -113,7 +113,7 @@ public class LibraryDao {
 			book2.setContent("테스트 내용");
 
 			Book book3 = new Book();
-			book3.setId("AK5DC579");
+			book3.setId("AK5DC580");
 			book3.setTitle("테스트2");
 			book3.setAuthor("테스트 작가2");
 			book3.setPlot("테스트 줄거리2");
@@ -171,27 +171,39 @@ public class LibraryDao {
 	}
 	
 	public static ArrayList<String> rentList(Map<String, String> sessionInfo) {
-		for(int i = 0; i < LibraryDao.memberList.size(); i++) {
-			if(sessionInfo.get("id") == LibraryDao.memberList().get(i).getId()) {
+		ArrayList<Member> list = memberList();
+		// sessionInfo의 id값과 일치하는 Member 객체를 찾음
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getId().equals(sessionInfo.get("id"))) {
+				// Member 객체에서 rentBookList를 가져와서 rentList에 넣고 리턴함
+				ArrayList<String> rentList = list.get(i).getRentBookList();
 				
-				ArrayList<String> rentList = LibraryDao.memberList().get(i).getRentBookList();
 				return rentList;
 			}
 		}
+		
 		return null;
 	}
 	
-	public static boolean rentBook(Map<String, String> sessionInfo, String bookId) {
+	public static boolean rentBook(Map<String, String> sessionInfo, String bookIndex) {
 		for(int i = 0; i < LibraryDao.memberList.size(); i++) {
+			// sessionInfo의 id값과 일치하는 Member 객체를 찾음
 			if(sessionInfo.get("id") == LibraryDao.memberList.get(i).getId()) {
 				Member member = LibraryDao.memberList.get(i);
 				ArrayList<String> tempRentBookList = member.getRentBookList();
+				// 최초 rentBookList의 값은 null값이므로 최초 대출시 초기화를 시켜줌
 				if (tempRentBookList == null) {
 					tempRentBookList = new ArrayList<String>();
 				}
-				tempRentBookList.add(bookId);
+				// 도서 목록에서 선택한 도서의 인덱스값을 넘겨주고 Book 객체를 받음
+				Book book = bookList.get(Integer.valueOf(bookIndex));
+				
+				// Member 객체에서 가져온 rentList에 가져온 Book객체의 id값을 추가해줌
+				tempRentBookList.add(book.getId());
+				
 				member.setRentBookList(tempRentBookList);
 				
+				// 기존의 Member 객체를 rentBookList에 id값을 추가한 Member 객체로 교체함
 				LibraryDao.memberList.set(i, member);
 				return true;
 			}
@@ -202,19 +214,40 @@ public class LibraryDao {
 	
 	public static boolean returnBook(Map<String, String> sessionInfo, String bookId) {
 		for(int i = 0; i < LibraryDao.memberList.size(); i++) {
+			// sessionInfo의 id값과 일치하는 Member 객체를 찾음
 			if(sessionInfo.get("id") == LibraryDao.memberList.get(i).getId()) {
 				Member member = LibraryDao.memberList.get(i);
 				ArrayList<String> tempRentBookList = member.getRentBookList();
-				int rentBookIndex = tempRentBookList.indexOf(bookId);
-				tempRentBookList.remove(rentBookIndex);
+				
+				// Member 객체에서 가져온 rentList에 가져온 Book객체의 id값을 추가해줌
+				int rentIndex = tempRentBookList.indexOf(bookId);
+				tempRentBookList.remove(rentIndex);
+				
 				member.setRentBookList(tempRentBookList);
 				
+				// 기존의 Member 객체를 rentBookList에 id값을 추가한 Member 객체로 교체함
 				LibraryDao.memberList.set(i, member);
 				return true;
 			}
 		}
 		
 		return false;
+		
+		
+//		for(int i = 0; i < LibraryDao.memberList.size(); i++) {
+//			if(sessionInfo.get("id") == LibraryDao.memberList.get(i).getId()) {
+//				Member member = LibraryDao.memberList.get(i);
+//				ArrayList<String> tempRentBookList = member.getRentBookList();
+//				int rentBookIndex = tempRentBookList.indexOf(bookId);
+//				tempRentBookList.remove(rentBookIndex);
+//				member.setRentBookList(tempRentBookList);
+//				
+//				LibraryDao.memberList.set(i, member);
+//				return true;
+//			}
+//		}
+//		
+//		return false;
 	}
 	
 	public static Book searchBook(String bookId) {

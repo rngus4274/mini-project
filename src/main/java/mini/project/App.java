@@ -37,19 +37,20 @@ public class App {
 								// 도서 목록
 								book_list: while (true) {
 									ArrayList<Book> bookList = LibraryDao.bookList();
-									command = Screen.bookList(bookList);
-									if (command.equals("exit")) {
+									String command_bookIndex = Screen.bookList(bookList);
+									if (command_bookIndex.equals("exit")) {
 										continue login_first;
 									} else {
 										try {
-											command = Screen.bookInfoMember(bookList, command, sessionInfo);
+											command = Screen.bookInfoMember(bookList, command_bookIndex, sessionInfo);
 											if (command.equals("exit")) {
 												continue book_list;
 											} else if(command.equals("1")) {
 												// 대출
-												boolean rentResult = LibraryDao.rentBook(sessionInfo, command);
+												boolean rentResult = LibraryDao.rentBook(sessionInfo, command_bookIndex);
 												if (rentResult) {
 													System.out.println("대출 되었습니다.");
+													ArrayList myRentList = LibraryDao.rentList(sessionInfo);
 												} else {
 													System.out.println("대출에 실패 하였습니다.");
 												}
@@ -66,17 +67,39 @@ public class App {
 
 							} else if (command.equals("2")) {
 								// 대여 목록
-//								book_rental: while (true) {
-//									ArrayList<Book> bookRental = LibraryDao.bookList();
-//									command = Screen.bookRentalList(bookRental, sessionInfo.get("name"));
-//									if (command.equals("exit")) {
-//										continue login_first;
-//									} 
-//								}
-								book_rental:
-								while(true) {
+								book_rental: while (true) {
+									//ArrayList<Book> bookRental = LibraryDao.bookList(); <- 이전 코드(아래가 바뀐 코드)
+									// sessionInfo에 id값을 이용해서 해당 사용자의 rentList를 가져오는 메서드
 									ArrayList<String> rentList = LibraryDao.rentList(sessionInfo);
-									command = Screen.rentList(rentList);
+									String command_bookId = Screen.bookRentalList(rentList, sessionInfo.get("name"));
+									if (command_bookId.equals("exit")) {
+										continue login_first;
+									} else {
+										try {
+											ArrayList<Book> bookList = LibraryDao.bookList();
+											command = Screen.bookInfoMember(bookList, command_bookId);
+											if (command.equals("exit")) {
+												continue book_rental;
+											} else if(command.equals("1")) {
+												// 반납
+												boolean rentResult = LibraryDao.returnBook(sessionInfo, command_bookId);
+												if (rentResult) {
+													System.out.println("대출 되었습니다.");
+													continue book_rental;
+												} else {
+													System.out.println("대출에 실패 하였습니다.");
+													continue book_rental;
+												}
+											} else {
+												System.out.println("존재하지 않는 명령입니다.");
+												continue book_rental;
+											}
+
+										} catch (Exception e) {
+											System.out.println("해당하는 책 정보가 존재하지 않습니다.");
+											continue book_rental;
+										}
+									}
 								}
 
 

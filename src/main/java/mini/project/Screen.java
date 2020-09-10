@@ -67,7 +67,7 @@ public class Screen {
 		System.out.printf("저자    : %s\n", bookInfo.get("author"));
 		System.out.printf("줄거리 : %s\n", bookInfo.get("plot"));
 		System.out.println("========================");
-		if(LibraryDao.rentList(sessionInfo) == null || LibraryDao.rentList(sessionInfo).contains(bookInfo.get("id"))) {
+		if(LibraryDao.rentList(sessionInfo) == null || !LibraryDao.rentList(sessionInfo).contains(bookInfo.get("id"))) {
 			System.out.println("1. 대출");
 		} else {
 			System.out.println("[대출중]");
@@ -77,15 +77,30 @@ public class Screen {
 
 		return command;
 	}
+	
+	public static String bookInfoMember(ArrayList<Book> bookList, String bookId) {
+		//		Book bookInfo = bookList.get(Integer.valueOf(index));
+		
+		Book bookInfo = LibraryDao.searchBook(bookId);
+		System.out.println("========================");
+		System.out.printf("제목    : %s\n", bookInfo.getTitle());
+		System.out.printf("저자    : %s\n", bookInfo.getAuthor());
+		System.out.printf("줄거리 : %s\n", bookInfo.getPlot());
+		System.out.println("========================");
+		System.out.println("1. 반납");
+		System.out.println("뒤로 가려면 exit를 입력해 주세요");
+		String command = Prompt.inputString("명령 : ");
+
+		return command;
+	}
 
 
 	//for (int i = 0; i < LibraryDao.memberList().size(); i++) {
 
-	public static String bookRentalList(ArrayList<Book> bookList, Object name) {
+	public static String bookRentalList1(ArrayList<Book> bookList, Object name) {
 		Member member = new Member();
 		LibraryDao rent = new LibraryDao();
-
-
+		
 		System.out.printf("======%s님의 대여목록=======\n", name);
 
 		if (member.getRentBookList() == null) {
@@ -105,7 +120,6 @@ public class Screen {
 				System.out.printf("%s, %s\n", i, bookList.get(i).getTitle());
 			}
 			command = Prompt.inputString("명령 : ");
-			rent.rentBook(command, );
 		}
 		return command;
 	}
@@ -318,21 +332,54 @@ public class Screen {
 		}
 	}
 	
-	public static String rentList(ArrayList<String> rentList) {
-		System.out.println("=========대출목록=========");
-		if (rentList != null) {			
+	public static String bookRentalList(ArrayList<String> rentList, Object name) {
+		System.out.printf("======%s님의 대여목록=======\n", name);
+		if (rentList != null) {	
+			// 인자로 넘어온 rentList안에 있는 대출중인 도서 id값으로 for문 돌림
 			for (int i = 0; i < rentList.size(); i++) {
+				// searchBook : 책 id값을 넘겨주면 해당하는 Book 객체를 반환해주는 메서드
 				Book bookInfo = LibraryDao.searchBook(rentList.get(i));
 				System.out.printf("%s. 제목 : %s | 저자 : %s\n", i, bookInfo.getTitle(), bookInfo.getAuthor());
 			}
 		} else {
-			System.out.println("대출중인 도서가 없습니다.");
+			System.out.printf("%s님은 현재 책을 대여하고있지 않습니다.\n", name);
 		}
 		System.out.println("========================");
 		System.out.println("뒤로 가려면 exit를 입력해 주세요");
 		String command = Prompt.inputString("명령 : ");
-
-		return command;
+		if(!command.equals("exit")) {
+			return rentList.get(Integer.valueOf(command));
+		} else {
+			return command;
+		}
+		
+		// 이전 코드
+		/////////////////////////////////////////////////////////
+		
+//		Member member = new Member();
+//		LibraryDao rent = new LibraryDao();
+//		
+//		System.out.printf("======%s님의 대여목록=======\n", name);
+//
+//		if (member.getRentBookList() == null) {
+//			System.out.printf("%s님은 현재 책을 대여하고있지 않습니다.\n", name);
+//		} else {
+//			System.out.printf("%s\n", member.getRentBookList());
+//		}
+//		System.out.println("========================");
+//		while (true) {
+//			String command = Prompt.inputString("추가로 대여하시겠습니까?(y/N) : ");
+//			if (!command.equalsIgnoreCase("y")) {		
+//				System.out.println("대여를 종료합니다.");
+//				break;
+//			}
+//			System.out.println("========대여 가능목록========");
+//			for (int i = 0; i < bookList.size(); i++) {
+//				System.out.printf("%s, %s\n", i, bookList.get(i).getTitle());
+//			}
+//			command = Prompt.inputString("명령 : ");
+//		}
+//		return command;
 		
 	}
 
