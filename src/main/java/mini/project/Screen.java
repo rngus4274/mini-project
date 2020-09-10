@@ -208,7 +208,7 @@ public class Screen {
 		}
 
 		while (addMember.getPassword() == null || addMember.getPassword().isEmpty()) {
-			addMember.setId(Prompt.inputString("*비밀번호 : "));
+			addMember.setPassword(Prompt.inputString("*비밀번호 : "));
 		}
 
 		try {
