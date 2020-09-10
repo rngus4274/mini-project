@@ -130,6 +130,7 @@ public class LibraryDao {
 	public static Map<String, String> bookInfo(String bookIndex) {
 		Book bookInfo = bookList.get(Integer.valueOf(bookIndex));
 		Map<String, String> bookInfoObject = new HashMap<String, String>();
+		bookInfoObject.put("id", bookInfo.getId());
 		bookInfoObject.put("title", bookInfo.getTitle());
 		bookInfoObject.put("author", bookInfo.getAuthor());
 		bookInfoObject.put("plot", bookInfo.getPlot());
@@ -171,8 +172,9 @@ public class LibraryDao {
 	
 	public static ArrayList<String> rentList(Map<String, String> sessionInfo) {
 		for(int i = 0; i < LibraryDao.memberList.size(); i++) {
-			if(sessionInfo.get("id") == LibraryDao.memberList.get(i).getId()) {
-				ArrayList<String> rentList = LibraryDao.memberList.get(i).getRentBookList();
+			if(sessionInfo.get("id") == LibraryDao.memberList().get(i).getId()) {
+				
+				ArrayList<String> rentList = LibraryDao.memberList().get(i).getRentBookList();
 				return rentList;
 			}
 		}
@@ -184,6 +186,9 @@ public class LibraryDao {
 			if(sessionInfo.get("id") == LibraryDao.memberList.get(i).getId()) {
 				Member member = LibraryDao.memberList.get(i);
 				ArrayList<String> tempRentBookList = member.getRentBookList();
+				if (tempRentBookList == null) {
+					tempRentBookList = new ArrayList<String>();
+				}
 				tempRentBookList.add(bookId);
 				member.setRentBookList(tempRentBookList);
 				
@@ -210,5 +215,14 @@ public class LibraryDao {
 		}
 		
 		return false;
+	}
+	
+	public static Book searchBook(String bookId) {
+		for(int i = 0; i < bookList.size(); i++) {
+			if(bookId == bookList.get(i).getId()) {
+				return bookList.get(i);
+			}
+		}
+		return null;
 	}
 }

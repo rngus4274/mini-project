@@ -42,9 +42,17 @@ public class App {
 										continue login_first;
 									} else {
 										try {
-											command = Screen.bookInfo(bookList, command);
+											command = Screen.bookInfoMember(bookList, command, sessionInfo);
 											if (command.equals("exit")) {
 												continue book_list;
+											} else if(command.equals("1")) {
+												// 대출
+												boolean rentResult = LibraryDao.rentBook(sessionInfo, command);
+												if (rentResult) {
+													System.out.println("대출 되었습니다.");
+												} else {
+													System.out.println("대출에 실패 하였습니다.");
+												}
 											} else {
 												System.out.println("존재하지 않는 명령입니다.");
 											}
@@ -57,12 +65,18 @@ public class App {
 								}
 
 							} else if (command.equals("2")) {
-								book_rental: while (true) {
-									ArrayList<Book> bookRental = LibraryDao.bookList();
-									command = Screen.bookRentalList(bookRental, sessionInfo.get("name"));
-									if (command.equals("exit")) {
-										continue login_first;
-									} 
+								// 대여 목록
+//								book_rental: while (true) {
+//									ArrayList<Book> bookRental = LibraryDao.bookList();
+//									command = Screen.bookRentalList(bookRental, sessionInfo.get("name"));
+//									if (command.equals("exit")) {
+//										continue login_first;
+//									} 
+//								}
+								book_rental:
+								while(true) {
+									ArrayList<String> rentList = LibraryDao.rentList(sessionInfo);
+									command = Screen.rentList(rentList);
 								}
 
 
@@ -126,11 +140,17 @@ public class App {
 									ArrayList<Book> bookList = LibraryDao.bookList();
 									if (bookIndex.equals("add")) {
 										// 도서 추가
+										boolean result = Screen.addBook();
+										if (result) {
+											System.out.println("도서를 추가 하였습니다.");
+										} else {
+											System.out.println("도서 추가에 실패하였습니다.");
+										}
 									} else if (bookIndex.equals("exit")) {
 										continue admin_menu;
 									} else {
 										try {
-											command = Screen.bookInfo(bookList, bookIndex);
+											command = Screen.bookInfoAdmin(bookList, bookIndex);
 											if (command.equals("exit")) {
 												continue book_list;
 											} else if (command.equals("1")) {
