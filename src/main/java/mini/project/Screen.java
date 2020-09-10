@@ -59,19 +59,34 @@ public class Screen {
 		return command;
 	}
 
+
+	//for (int i = 0; i < LibraryDao.memberList().size(); i++) {
+
 	public static String bookRentalList(ArrayList<Book> bookList, Object name) {
-		System.out.printf("======현재 %s님의 대여목록=======\n", name);
-		for (int i = 0; i < bookList.size(); i++) {
-			System.out.printf("%s\n", bookList.get(i).getTitle());
+		Member member = new Member();
+		LibraryDao rent = new LibraryDao();
+
+
+		System.out.printf("======%s님의 대여목록=======\n", name);
+
+		if (member.getRentBookList() == null) {
+			System.out.printf("%s님은 현재 책을 대여하고있지 않습니다.\n", name);
+		} else {
+			System.out.printf("%s\n", member.getRentBookList());
 		}
 		System.out.println("========================");
-		book_rental: while (true) {
+		while (true) {
 			String command = Prompt.inputString("추가로 대여하시겠습니까?(y/N) : ");
 			if (!command.equalsIgnoreCase("y")) {		
 				System.out.println("대여를 종료합니다.");
 				break;
-			} System.out.println("대여를 진행합니다.");
-			break;
+			}
+			System.out.println("========대여 가능목록========");
+			for (int i = 0; i < bookList.size(); i++) {
+				System.out.printf("%s, %s\n", i, bookList.get(i).getTitle());
+			}
+			command = Prompt.inputString("명령 : ");
+			rent.rentBook(sessionInfo, bookId);
 		}
 		return command;
 	}
