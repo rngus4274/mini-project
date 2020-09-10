@@ -210,6 +210,8 @@ public class Screen {
 		while (addMember.getPassword() == null || addMember.getPassword().isEmpty()) {
 			addMember.setPassword(Prompt.inputString("*비밀번호 : "));
 		}
+		
+		addMember.setRating("1");
 
 		try {
 			LibraryDao.addMember(addMember);
