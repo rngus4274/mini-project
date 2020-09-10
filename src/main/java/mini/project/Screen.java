@@ -86,7 +86,7 @@ public class Screen {
 				System.out.printf("%s, %s\n", i, bookList.get(i).getTitle());
 			}
 			command = Prompt.inputString("명령 : ");
-			rent.rentBook(sessionInfo, bookId);
+			rent.rentBook(command, );
 		}
 		return command;
 	}
