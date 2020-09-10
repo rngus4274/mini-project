@@ -1,14 +1,12 @@
 package mini.project;
 
-import java.util.ArrayList;
-
 public class Book {
 	private String id; 
 	private String title;
 	private String author;
 	private String plot;
 	private String content;
-	
+
 	public String getId() {
 		return id;
 	}
@@ -39,5 +37,5 @@ public class Book {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	
+
 }

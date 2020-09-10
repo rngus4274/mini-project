@@ -26,7 +26,8 @@ public class Member {
 	}
 	public void setPassword(String password) {
 		this.password = password;
-	}
+	}	
+
 	public String getRating() {
 		return rating;
 	}
@@ -39,6 +40,4 @@ public class Member {
 	public void setRentBookList(ArrayList<String> rentBookList) {
 		this.rentBookList = rentBookList;
 	}
-	
-	
 }

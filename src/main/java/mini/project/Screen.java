@@ -2,9 +2,10 @@ package mini.project;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Scanner;
 
 public class Screen {
+	private static String command;
+
 	public static String main() {
 
 		System.out.println("=============================");
@@ -21,7 +22,7 @@ public class Screen {
 		System.out.println("=============================");
 		System.out.printf("전자 도서관에 오신것을 환영합니다  %s님!\n", name);
 		System.out.println("1. 도서목록");
-		System.out.println("2. 대출목록");
+		System.out.println("2. 대여목록");
 		System.out.println("3. 로그아웃");
 		System.out.println("=============================");
 		String command = Prompt.inputString("명령 : ");
@@ -41,8 +42,9 @@ public class Screen {
 		return command;
 	}
 
+
 	public static String bookInfo(ArrayList<Book> bookList, String index) {
-//		Book bookInfo = bookList.get(Integer.valueOf(index));
+		//		Book bookInfo = bookList.get(Integer.valueOf(index));
 		Map<String, String> bookInfo = LibraryDao.bookInfo(index);
 		System.out.println("========================");
 		System.out.printf("제목    : %s\n", bookInfo.get("title"));
@@ -54,6 +56,23 @@ public class Screen {
 		System.out.println("뒤로 가려면 exit를 입력해 주세요");
 		String command = Prompt.inputString("명령 : ");
 
+		return command;
+	}
+
+	public static String bookRentalList(ArrayList<Book> bookList, Object name) {
+		System.out.printf("======현재 %s님의 대여목록=======\n", name);
+		for (int i = 0; i < bookList.size(); i++) {
+			System.out.printf("%s\n", bookList.get(i).getTitle());
+		}
+		System.out.println("========================");
+		book_rental: while (true) {
+			String command = Prompt.inputString("추가로 대여하시겠습니까?(y/N) : ");
+			if (!command.equalsIgnoreCase("y")) {		
+				System.out.println("대여를 종료합니다.");
+				break;
+			} System.out.println("대여를 진행합니다.");
+			break;
+		}
 		return command;
 	}
 
@@ -197,17 +216,17 @@ public class Screen {
 		if (editBook.getAuthor().isEmpty()) {
 			editBook.setAuthor(LibraryDao.bookInfo(bookIndex).get("author"));
 		}
-		
+
 		editBook.setPlot(Prompt.inputString("줄거리 : "));
 		if (editBook.getPlot().isEmpty()) {
 			editBook.setPlot(LibraryDao.bookInfo(bookIndex).get("plot"));
 		}
-		
+
 		editBook.setContent(Prompt.inputString("내용 : "));
 		if (editBook.getContent().isEmpty()) {
 			editBook.setContent(LibraryDao.bookInfo(bookIndex).get("content"));
 		}
-		
+
 		try {
 			LibraryDao.editBook(editBook, Integer.valueOf(bookIndex));
 			resultMessage = "수정 되었습니다.";
@@ -217,7 +236,7 @@ public class Screen {
 
 		return resultMessage;
 	}
-	
+
 	public static boolean removeBook(String bookIndex) {
 		while (true) {
 			String answer = Prompt.inputString("" + "정말 삭제 하시겠습니까?\n" + "(1.예 / 2.아니요)\n" + "명령 : " + "");

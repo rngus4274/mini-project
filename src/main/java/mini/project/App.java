@@ -1,9 +1,7 @@
-
 package mini.project;
 
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Scanner;
 
 public class App {
 	public static void main(String[] args) {
@@ -59,8 +57,14 @@ public class App {
 								}
 
 							} else if (command.equals("2")) {
-								// 대출 목록 보여주는 곳
-								System.out.println("기능 구현중");
+								book_rental: while (true) {
+									ArrayList<Book> bookRental = LibraryDao.bookList();
+									command = Screen.bookRentalList(bookRental, sessionInfo.get("name"));
+									if (command.equals("exit")) {
+										continue login_first;
+									} 
+								}
+
 
 							} else if (command.equals("3")) {
 								// 로그아웃
